@@ -10,6 +10,7 @@ import es.iessaladillo.pedrojoya.demorecyclerview.data.local.model.Avatar;
 
 // DO NOT TOUCH
 
+@SuppressWarnings({"FieldCanBeLocal", "WeakerAccess"})
 public class Database {
 
     private static Database instance;
@@ -38,6 +39,7 @@ public class Database {
         return instance;
     }
 
+    @SuppressWarnings("WeakerAccess")
     @VisibleForTesting()
     public void insertAvatar(Avatar avatar) {
         avatars.add(avatar);

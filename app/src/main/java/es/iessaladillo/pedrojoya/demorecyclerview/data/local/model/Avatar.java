@@ -5,9 +5,9 @@ import android.os.Parcelable;
 
 public class Avatar implements Parcelable {
     private static long id_setter = 1;
-    private long id;
-    private int imageResId;
-    private String name;
+    private final long id;
+    private final int imageResId;
+    private final String name;
 
     public Avatar(int imageResId, String name) {
         this.imageResId = imageResId;
@@ -16,6 +16,7 @@ public class Avatar implements Parcelable {
         id_setter++;
     }
 
+    @SuppressWarnings("WeakerAccess")
     protected Avatar(Parcel in) {
         id = in.readLong();
         imageResId = in.readInt();
