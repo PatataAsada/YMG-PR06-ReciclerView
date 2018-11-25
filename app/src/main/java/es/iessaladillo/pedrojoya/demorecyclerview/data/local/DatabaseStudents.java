@@ -36,4 +36,8 @@ public class DatabaseStudents {
         studentsLiveData.setValue(new ArrayList<>(students));
     }
 
+    public void addStudent(Student newStudent) {
+        students.add(newStudent);
+        updateStudentsLiveData();
+    }
 }

@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import es.iessaladillo.pedrojoya.demorecyclerview.data.local.Database;
 
+@SuppressWarnings("ALL")
 public class Student implements Parcelable {
 
     // TODO: Define Student properties.
@@ -94,6 +95,14 @@ public class Student implements Parcelable {
 
     public void setWeb(String web) {
         this.web = web;
+    }
+
+    public Avatar getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
     }
 
     @Override

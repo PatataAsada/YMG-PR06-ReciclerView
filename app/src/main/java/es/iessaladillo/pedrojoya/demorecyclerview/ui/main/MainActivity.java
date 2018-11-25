@@ -2,6 +2,7 @@ package es.iessaladillo.pedrojoya.demorecyclerview.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding db;
     private MainActivityViewModel viewModel;
     private MainActivityAdapter listAdapter;
+    public Student newStudent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +68,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void editStudent(Student item) {
-        Intent student = new Intent(this, ProfileActivity.class);
+        Student oldStudent = item;
+        Intent student = new Intent(this,ProfileActivity.class);
         student.putExtra(STUDENT, item);
         startActivityForResult(student, EDIT_USER_REQUEST);
-
         onActivityResult(EDIT_USER_REQUEST, RESULT_OK, student);
+        viewModel.editStudent(oldStudent,newStudent);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -79,8 +82,12 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EDIT_USER_REQUEST) {
             if (resultCode == RESULT_OK) {
-                editStudent(data.getParcelableExtra(STUDENT));
+                setNewStudent(data.getParcelableExtra(STUDENT));
             }
         }
+    }
+
+    private void setNewStudent(Student student) {
+        newStudent = student;
     }
 }

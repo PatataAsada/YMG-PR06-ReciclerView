@@ -29,7 +29,7 @@ public class MainActivityAdapter extends ListAdapter<Student, MainActivityAdapte
 
             @Override
             public boolean areContentsTheSame(@NonNull Student oldItem, @NonNull Student newItem) {
-                return oldItem.getImageResId() == newItem.getImageResId() &&
+                return oldItem.getAvatar().equals(newItem.getAvatar()) &&
                         TextUtils.equals(oldItem.getName(), newItem.getName()) &&
                         TextUtils.equals(oldItem.getEmail(), newItem.getEmail()) &&
                         oldItem.getPhonenumber() == newItem.getPhonenumber() &&
@@ -73,7 +73,7 @@ public class MainActivityAdapter extends ListAdapter<Student, MainActivityAdapte
         private final Button btnEdit;
         private final Button btnDelete;
 
-        public ViewHolder(View itemView, final OnEditStudentClickListener onEditStudentListener, final OnDeleteStudentClickListener onDeleteStudentClickListener) {
+        public ViewHolder(View itemView, final OnEditStudentClickListener onEditStudentClickListener, final OnDeleteStudentClickListener onDeleteStudentClickListener) {
             super(itemView);
             imgAvatar = ViewCompat.requireViewById(itemView, R.id.imgAvatar);
             lblName = ViewCompat.requireViewById(itemView, R.id.lblName);
@@ -81,12 +81,12 @@ public class MainActivityAdapter extends ListAdapter<Student, MainActivityAdapte
             lblEmail = ViewCompat.requireViewById(itemView, R.id.lblEmail);
             btnDelete = ViewCompat.requireViewById(itemView, R.id.btnDelete);
             btnEdit = ViewCompat.requireViewById(itemView, R.id.btnEdit);
-            btnEdit.setOnClickListener(v -> onEditStudentListener.onItemClick(getAdapterPosition()));
+            btnEdit.setOnClickListener(v -> onEditStudentClickListener.onItemClick(getAdapterPosition()));
             btnDelete.setOnClickListener(v -> onDeleteStudentClickListener.onItemClick(getAdapterPosition()));
         }
 
         public void bind(Student student) {
-            imgAvatar.setImageResource(student.getImageResId());
+            imgAvatar.setImageResource(student.getAvatar().getImageResId());
             lblName.setText(student.getName());
             lblEmail.setText(student.getEmail());
             lblPhonenumber.setText(String.valueOf(student.getPhonenumber()));
