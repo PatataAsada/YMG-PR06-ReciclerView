@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">DemoRecyclerView</string>
+    <string name="main_no_students_yet">no hay estudiantes</string>
+    <string name="CardViewBtnEdit">Edit</string>
+    <string name="btnDelete">Delete</string>
+    <string name="avatar_label">Select Avatar</string>
+    <string name="main_invalid_data">Invalid data</string>
+    <string name="main_save">Save</string>
+    <string name="main_saved_succesfully">Student saved successfully</string>
+    <string name="main_error_saving">Error saving student</string>
+    <string name="avatar_select">Select</string>
+    <string name="activity_avatar_ratio">200:195</string>
+    <string name="lblName_txt">Name</string>
+    <string name="txtName_h">(name)</string>
+    <string name="txtEmail_h">(email)</string>
+    <string name="lblEmail">Email</string>
+    <string name="lblPhonenumbar_txt">Phonenumber</string>
+    <string name="txtPhone_h">(Phonenumber)</string>
+    <string name="imgEmail_desc">Email icon</string>
+    <string name="imgPhonenumber_desc">Phonenumber icon</string>
+    <string name="lblAddress_txt">Address</string>
+    <string name="lblAddress_h">(Address)</string>
+    <string name="imgAddress_desc">Address icon</string>
+    <string name="lblWeb_txt">Web</string>
+    <string name="txtWeb_h">(web)</string>
+    <string name="imgWeb_desc">Web icon</string>
+    <string name="avatar_desc">avatar icon</string>
+</resources>

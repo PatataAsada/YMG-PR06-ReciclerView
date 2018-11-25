@@ -1,5 +1,5 @@
 package es.iessaladillo.pedrojoya.demorecyclerview.ui.main;
 
-interface OnDeleteStudentClickListener {
+interface OnStudentClickListener {
     void onItemClick(int adapterPosition);
 }

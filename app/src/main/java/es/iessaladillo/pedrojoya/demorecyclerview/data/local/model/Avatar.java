@@ -1,4 +1,4 @@
-package es.iessaladillo.pedrojoya.pr05.data.local.model;
+package es.iessaladillo.pedrojoya.demorecyclerview.data.local.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

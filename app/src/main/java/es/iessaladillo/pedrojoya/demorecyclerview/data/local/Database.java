@@ -1,12 +1,12 @@
-package es.iessaladillo.pedrojoya.pr05.data.local;
+package es.iessaladillo.pedrojoya.demorecyclerview.data.local;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import androidx.annotation.VisibleForTesting;
-import es.iessaladillo.pedrojoya.pr05.R;
-import es.iessaladillo.pedrojoya.pr05.data.local.model.Avatar;
+import es.iessaladillo.pedrojoya.demorecyclerview.R;
+import es.iessaladillo.pedrojoya.demorecyclerview.data.local.model.Avatar;
 
 // DO NOT TOUCH
 
