@@ -24,14 +24,17 @@ import androidx.core.app.ActivityCompat;
 import es.iessaladillo.pedrojoya.demorecyclerview.R;
 import es.iessaladillo.pedrojoya.demorecyclerview.data.local.Database;
 import es.iessaladillo.pedrojoya.demorecyclerview.data.local.model.Avatar;
+import es.iessaladillo.pedrojoya.demorecyclerview.data.local.model.Student;
 import es.iessaladillo.pedrojoya.demorecyclerview.ui.avatar.AvatarActivity;
 import es.iessaladillo.pedrojoya.demorecyclerview.utils.ValidationUtils;
 
 import static es.iessaladillo.pedrojoya.demorecyclerview.utils.KeyboardUtils.hideSoftKeyboard;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings("SpellCheckingInspection")
 public class ProfileActivity extends AppCompatActivity {
 
+    private static final String STUDENT = "STUDENT";
+    private static final String EXTRA_AVATAR = "EXTRA_AVATAR";
     final int PICK_AVATAR_REQUEST = 1;
     private Avatar avatar = Database.getInstance().queryAvatar(1);
     private TextView lblAvatar;
@@ -51,13 +54,36 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText txtWeb;
     private ImageView imgWeb;
     private Intent intention;
+    @SuppressWarnings("FieldCanBeLocal")
+    private Intent oldStudent;
+    private Student student;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_student);
         setupViews(savedInstanceState);
         initListeners();
+        initIntent(savedInstanceState);
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void initIntent(Bundle savedInstanceState) {
+        if(savedInstanceState==null){
+            oldStudent = getIntent();
+            student = oldStudent.getParcelableExtra(STUDENT);
+            avatar = student.getAvatar();
+        }else{
+            oldStudent = savedInstanceState.getParcelable(STUDENT);
+            student = oldStudent.getParcelableExtra(STUDENT);
+            avatar = student.getAvatar();
+        }
+        setAvatar(avatar);
+        txtName.setText(student.getName());
+        txtAddress.setText(student.getAddress());
+        txtEmail.setText(student.getEmail());
+        txtPhonenumber.setText(student.getPhonenumber());
+        txtWeb.setText(student.getWeb());
     }
 
     @Override
@@ -70,7 +96,14 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable("AVATAR",avatar);
+        student.setAvatar(avatar);
+        student.setName(txtName.toString());
+        student.setEmail(txtEmail.toString());
+        student.setPhonenumber(Integer.parseInt(txtPhonenumber.toString()));
+        student.setAddress(txtAddress.toString());
+        student.setWeb(txtWeb.toString());
+
+        outState.putParcelable(STUDENT,student);
     }
 
     private void initListeners() {
@@ -95,7 +128,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void changeAvatar(View v) {
         intention = new Intent(v.getContext(), AvatarActivity.class);
 
-        intention.putExtra("EXTRA_AVATAR", avatar);
+        intention.putExtra(EXTRA_AVATAR, avatar);
         startActivityForResult(intention, PICK_AVATAR_REQUEST);
 
         onActivityResult(PICK_AVATAR_REQUEST, RESULT_OK, intention);
@@ -174,6 +207,7 @@ public class ProfileActivity extends AppCompatActivity {
         else lbl.setTypeface(Typeface.DEFAULT);
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void setupViews(Bundle savedInstanceState) {
         //AVATAR
         imgAvatar = ActivityCompat.requireViewById(this, R.id.imgAvatar);
