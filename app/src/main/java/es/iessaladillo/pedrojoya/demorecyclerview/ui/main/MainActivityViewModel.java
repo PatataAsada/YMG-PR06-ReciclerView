@@ -41,4 +41,9 @@ public class MainActivityViewModel extends ViewModel {
         databaseStudents.deleteStudent(oldStudent);
         databaseStudents.addStudent(newStudent);
     }
+
+    public void addStudent(Student newStudent) {
+        databaseStudents.addStudent(newStudent);
+        students = databaseStudents.getStudents();
+    }
 }

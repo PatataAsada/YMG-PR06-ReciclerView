@@ -1,237 +1,244 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/lblName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:focusable="false"
-        android:labelFor="@id/txtName"
-        android:text="@string/lblName_txt"
-        android:textColor="@color/color_state_selector"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_avatar" />
+    <data>
 
-    <EditText
-        android:id="@+id/txtName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="@string/txtName_h"
-        android:imeOptions="actionNext"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblName"
-        tools:ignore="Autofill,LabelFor">
+    </data>
 
-        <requestFocus />
-    </EditText>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/txtEmail"
-        android:layout_width="191dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="@string/txtEmail_h"
-        android:imeOptions="actionNext"
-        android:importantForAutofill="no"
-        android:inputType="textEmailAddress"
-        android:windowSoftInputMode="stateVisible|adjustResize"
-        app:layout_constraintEnd_toStartOf="@+id/imgEmail"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblEmail"
-        tools:ignore="LabelFor,UnusedAttribute" />
+        <TextView
+            android:id="@+id/lblName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:focusable="false"
+            android:labelFor="@id/txtName"
+            android:text="@string/lblName_txt"
+            android:textColor="@color/color_state_selector"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_avatar" />
 
-    <TextView
-        android:id="@+id/lblEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:focusable="false"
-        android:labelFor="@id/txtEmail"
-        android:text="@string/lblEmail"
-        android:textColor="@color/color_state_selector"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtName" />
+        <EditText
+            android:id="@+id/txtName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="@string/txtName_h"
+            android:imeOptions="actionNext"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblName"
+            tools:ignore="Autofill,LabelFor">
 
-    <TextView
-        android:id="@+id/lblPhonenumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:focusable="false"
-        android:labelFor="@id/txtPhonenumber"
-        android:text="@string/lblPhonenumbar_txt"
-        android:textColor="@color/color_state_selector"
-        app:layout_constraintBottom_toTopOf="@+id/txtPhonenumber"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.06"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/txtName"
-        app:layout_constraintVertical_bias="1.0" />
+            <requestFocus />
+        </EditText>
 
-    <EditText
-        android:id="@+id/txtPhonenumber"
-        android:layout_width="118dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:hint="@string/txtPhone_h"
-        android:imeOptions="actionNext"
-        android:importantForAutofill="no"
-        android:inputType="phone"
-        android:windowSoftInputMode="stateVisible|adjustResize"
-        app:layout_constraintBottom_toBottomOf="@+id/txtEmail"
-        app:layout_constraintEnd_toStartOf="@+id/imgPhonenumber"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imgEmail"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/txtEmail"
-        tools:ignore="LabelFor,UnusedAttribute" />
+        <EditText
+            android:id="@+id/txtEmail"
+            android:layout_width="191dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="@string/txtEmail_h"
+            android:imeOptions="actionNext"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            app:layout_constraintEnd_toStartOf="@+id/imgEmail"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblEmail"
+            tools:ignore="LabelFor,UnusedAttribute" />
 
-    <ImageView
-        android:id="@+id/imgEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:contentDescription="@string/imgEmail_desc"
-        android:focusable="false"
-        android:tint="@color/color_state_selector"
-        app:layout_constraintBottom_toBottomOf="@+id/txtEmail"
-        app:layout_constraintEnd_toStartOf="@+id/txtPhonenumber"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/txtEmail"
-        app:layout_constraintTop_toTopOf="@+id/txtEmail"
-        app:srcCompat="@drawable/ic_email_24dp" />
+        <TextView
+            android:id="@+id/lblEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:focusable="false"
+            android:labelFor="@id/txtEmail"
+            android:text="@string/lblEmail"
+            android:textColor="@color/color_state_selector"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtName" />
 
-    <ImageView
-        android:id="@+id/imgPhonenumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/imgPhonenumber_desc"
-        android:focusable="false"
-        android:labelFor="@id/txtPhonenumber"
-        android:tint="@color/color_state_selector"
-        app:layout_constraintBottom_toBottomOf="@+id/txtPhonenumber"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/txtPhonenumber"
-        app:layout_constraintTop_toTopOf="@+id/txtPhonenumber"
-        app:srcCompat="@drawable/ic_call_24dp" />
+        <TextView
+            android:id="@+id/lblPhonenumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:focusable="false"
+            android:labelFor="@id/txtPhonenumber"
+            android:text="@string/lblPhonenumbar_txt"
+            android:textColor="@color/color_state_selector"
+            app:layout_constraintBottom_toTopOf="@+id/txtPhonenumber"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.06"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/txtName"
+            app:layout_constraintVertical_bias="1.0" />
 
-    <TextView
-        android:id="@+id/lblAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:focusable="false"
-        android:labelFor="@id/txtAddress"
-        android:text="@string/lblAddress_txt"
-        android:textColor="@color/color_state_selector"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
+        <EditText
+            android:id="@+id/txtPhonenumber"
+            android:layout_width="118dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:ems="10"
+            android:hint="@string/txtPhone_h"
+            android:imeOptions="actionNext"
+            android:importantForAutofill="no"
+            android:inputType="phone"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            app:layout_constraintBottom_toBottomOf="@+id/txtEmail"
+            app:layout_constraintEnd_toStartOf="@+id/imgPhonenumber"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/imgEmail"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/txtEmail"
+            tools:ignore="LabelFor,UnusedAttribute" />
 
-    <EditText
-        android:id="@+id/txtAddress"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:hint="@string/lblAddress_h"
-        android:imeOptions="actionNext"
-        android:importantForAutofill="no"
-        android:inputType="textPersonName"
-        android:windowSoftInputMode="stateVisible|adjustResize"
-        app:layout_constraintEnd_toStartOf="@+id/imgAddress"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblAddress"
-        tools:ignore="LabelFor,UnusedAttribute" />
+        <ImageView
+            android:id="@+id/imgEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/imgEmail_desc"
+            android:focusable="false"
+            android:tint="@color/color_state_selector"
+            app:layout_constraintBottom_toBottomOf="@+id/txtEmail"
+            app:layout_constraintEnd_toStartOf="@+id/txtPhonenumber"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/txtEmail"
+            app:layout_constraintTop_toTopOf="@+id/txtEmail"
+            app:srcCompat="@drawable/ic_email_24dp" />
 
-    <ImageView
-        android:id="@+id/imgAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:contentDescription="@string/imgAddress_desc"
-        android:focusable="false"
-        android:labelFor="@id/txtAddress"
-        android:tag="@drawable/ic_map_24dp"
-        android:tint="@color/color_state_selector"
-        app:layout_constraintBottom_toBottomOf="@+id/txtAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/txtAddress"
-        app:layout_constraintTop_toTopOf="@+id/txtAddress"
-        app:srcCompat="@drawable/ic_map_24dp" />
+        <ImageView
+            android:id="@+id/imgPhonenumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/imgPhonenumber_desc"
+            android:focusable="false"
+            android:labelFor="@id/txtPhonenumber"
+            android:tint="@color/color_state_selector"
+            app:layout_constraintBottom_toBottomOf="@+id/txtPhonenumber"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/txtPhonenumber"
+            app:layout_constraintTop_toTopOf="@+id/txtPhonenumber"
+            app:srcCompat="@drawable/ic_call_24dp" />
 
-    <TextView
-        android:id="@+id/lblWeb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:focusable="false"
-        android:labelFor="@id/txtWeb"
-        android:text="@string/lblWeb_txt"
-        android:textColor="@color/color_state_selector"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAddress" />
+        <TextView
+            android:id="@+id/lblAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:focusable="false"
+            android:labelFor="@id/txtAddress"
+            android:text="@string/lblAddress_txt"
+            android:textColor="@color/color_state_selector"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
 
-    <EditText
-        android:id="@+id/txtWeb"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:hint="@string/txtWeb_h"
-        android:imeOptions="actionDone"
-        android:importantForAutofill="no"
-        android:inputType="textWebEditText"
-        android:windowSoftInputMode="stateVisible|adjustResize"
-        app:layout_constraintEnd_toStartOf="@+id/imgWeb"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblWeb"
-        tools:ignore="LabelFor,UnusedAttribute" />
+        <EditText
+            android:id="@+id/txtAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:ems="10"
+            android:hint="@string/lblAddress_h"
+            android:imeOptions="actionNext"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            app:layout_constraintEnd_toStartOf="@+id/imgAddress"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblAddress"
+            tools:ignore="LabelFor,UnusedAttribute" />
 
-    <ImageView
-        android:id="@+id/imgWeb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:contentDescription="@string/imgWeb_desc"
-        android:labelFor="@id/txtWeb"
-        android:tint="@color/color_state_selector"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/txtWeb"
-        app:layout_constraintTop_toBottomOf="@+id/lblWeb"
-        app:srcCompat="@drawable/ic_web_24dp" />
+        <ImageView
+            android:id="@+id/imgAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/imgAddress_desc"
+            android:focusable="false"
+            android:labelFor="@id/txtAddress"
+            android:tag="@drawable/ic_map_24dp"
+            android:tint="@color/color_state_selector"
+            app:layout_constraintBottom_toBottomOf="@+id/txtAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/txtAddress"
+            app:layout_constraintTop_toTopOf="@+id/txtAddress"
+            app:srcCompat="@drawable/ic_map_24dp" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.6" />
+        <TextView
+            android:id="@+id/lblWeb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:focusable="false"
+            android:labelFor="@id/txtWeb"
+            android:text="@string/lblWeb_txt"
+            android:textColor="@color/color_state_selector"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtAddress" />
+
+        <EditText
+            android:id="@+id/txtWeb"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:ems="10"
+            android:hint="@string/txtWeb_h"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="textWebEditText"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            app:layout_constraintEnd_toStartOf="@+id/imgWeb"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblWeb"
+            tools:ignore="LabelFor,UnusedAttribute" />
+
+        <ImageView
+            android:id="@+id/imgWeb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/imgWeb_desc"
+            android:labelFor="@id/txtWeb"
+            android:tint="@color/color_state_selector"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/txtWeb"
+            app:layout_constraintTop_toBottomOf="@+id/lblWeb"
+            app:srcCompat="@drawable/ic_web_24dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.6" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

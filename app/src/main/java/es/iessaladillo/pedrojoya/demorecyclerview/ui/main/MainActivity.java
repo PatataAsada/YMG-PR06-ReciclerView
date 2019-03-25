@@ -2,7 +2,6 @@ package es.iessaladillo.pedrojoya.demorecyclerview.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -21,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String STUDENT = "STUDENT";
     private static final int EDIT_USER_REQUEST = 1;
+    private static final int ADD_STUDENT_REQUEST = 2;
     private ActivityMainBinding db;
     private MainActivityViewModel viewModel;
     private MainActivityAdapter listAdapter;
@@ -37,8 +37,7 @@ public class MainActivity extends AppCompatActivity {
         // TODO: Give lifecycle to binding.
         setupViews();
         observeStudents();
-
-        // TODO: Observe data from viewModel, giving them to adapter
+        
         // TODO: Observe emptyView visibility state.
     }
 
@@ -52,11 +51,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViews() {
         setupRecyclerView();
+        setupFAB();
+    }
+
+    private void setupFAB() {
+        db.fabAdd.setOnClickListener(v -> {
+            Intent student = new Intent(v.getContext(), ProfileActivity.class);
+            startActivityForResult(student, ADD_STUDENT_REQUEST);
+            onActivityResult(ADD_STUDENT_REQUEST, RESULT_OK, student);
+            viewModel.addStudent(newStudent);
+        });
     }
 
     private void setupRecyclerView() {
         listAdapter = new MainActivityAdapter(position -> editStudent(listAdapter.getItem(position)), position -> deleteStudent(listAdapter.getItem(position)));
-        // TODO: Set listeners of adapter.
         db.lstStudents.setHasFixedSize(true);
         db.lstStudents.setLayoutManager(new GridLayoutManager(this, getResources().getInteger(R.integer.main_lstStudents_columns)));
         db.lstStudents.setItemAnimator(new DefaultItemAnimator());
@@ -68,22 +76,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void editStudent(Student item) {
-        Student oldStudent = item;
         Intent student = new Intent(this,ProfileActivity.class);
         student.putExtra(STUDENT, item);
         startActivityForResult(student, EDIT_USER_REQUEST);
         onActivityResult(EDIT_USER_REQUEST, RESULT_OK, student);
-        viewModel.editStudent(oldStudent,newStudent);
+        viewModel.editStudent(item,newStudent);
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == EDIT_USER_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                setNewStudent(data.getParcelableExtra(STUDENT));
-            }
+        switch (requestCode){
+            case EDIT_USER_REQUEST:
+                if (resultCode == RESULT_OK) {
+                    setNewStudent(data.getParcelableExtra(STUDENT));
+                }
+                break;
+            case ADD_STUDENT_REQUEST:
+                if (resultCode == RESULT_OK) {
+                    setNewStudent(data.getParcelableExtra(STUDENT));
+                }
         }
     }
 

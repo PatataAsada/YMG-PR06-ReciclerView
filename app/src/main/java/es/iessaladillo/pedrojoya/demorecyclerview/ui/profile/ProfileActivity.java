@@ -21,11 +21,14 @@ import java.util.Objects;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.databinding.DataBindingUtil;
 import es.iessaladillo.pedrojoya.demorecyclerview.R;
 import es.iessaladillo.pedrojoya.demorecyclerview.data.local.Database;
 import es.iessaladillo.pedrojoya.demorecyclerview.data.local.model.Avatar;
 import es.iessaladillo.pedrojoya.demorecyclerview.data.local.model.Student;
+import es.iessaladillo.pedrojoya.demorecyclerview.databinding.ActivityStudentBinding;
 import es.iessaladillo.pedrojoya.demorecyclerview.ui.avatar.AvatarActivity;
+import es.iessaladillo.pedrojoya.demorecyclerview.utils.TextChangedListener;
 import es.iessaladillo.pedrojoya.demorecyclerview.utils.ValidationUtils;
 
 import static es.iessaladillo.pedrojoya.demorecyclerview.utils.KeyboardUtils.hideSoftKeyboard;
@@ -35,24 +38,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     private static final String STUDENT = "STUDENT";
     private static final String EXTRA_AVATAR = "EXTRA_AVATAR";
+    private ActivityStudentBinding sb;
     final int PICK_AVATAR_REQUEST = 1;
     private Avatar avatar = Database.getInstance().queryAvatar(1);
-    private TextView lblAvatar;
-    private ImageView imgAvatar;
-    private TextView lblName;
-    private EditText txtName;
-    private TextView lblEmail;
-    private EditText txtEmail;
-    private ImageView imgEmail;
-    private TextView lblPhonenumber;
-    private EditText txtPhonenumber;
-    private ImageView imgPhonenumber;
-    private TextView lblAddress;
-    private EditText txtAddress;
-    private ImageView imgAddress;
-    private TextView lblWeb;
-    private EditText txtWeb;
-    private ImageView imgWeb;
     private Intent intention;
     @SuppressWarnings("FieldCanBeLocal")
     private Intent oldStudent;
@@ -61,7 +49,8 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student);
+        student = new Student(0,1, "", "", 0,"","");
+        sb = DataBindingUtil.setContentView(this, R.layout.activity_student);
         setupViews(savedInstanceState);
         initListeners();
         initIntent(savedInstanceState);
@@ -69,21 +58,27 @@ public class ProfileActivity extends AppCompatActivity {
 
     @SuppressWarnings("ConstantConditions")
     private void initIntent(Bundle savedInstanceState) {
-        if(savedInstanceState==null){
-            oldStudent = getIntent();
-            student = oldStudent.getParcelableExtra(STUDENT);
-            avatar = student.getAvatar();
-        }else{
+        if (savedInstanceState == null) {
+            Student currentStudent = getIntent().getParcelableExtra(STUDENT);
+            if(currentStudent!=null) {
+                student = oldStudent.getParcelableExtra(STUDENT);
+            }
+            if(student!=null) {
+                avatar = student.getAvatar();
+            }
+        } else {
             oldStudent = savedInstanceState.getParcelable(STUDENT);
             student = oldStudent.getParcelableExtra(STUDENT);
             avatar = student.getAvatar();
         }
-        setAvatar(avatar);
-        txtName.setText(student.getName());
-        txtAddress.setText(student.getAddress());
-        txtEmail.setText(student.getEmail());
-        txtPhonenumber.setText(student.getPhonenumber());
-        txtWeb.setText(student.getWeb());
+        if(student!=null) {
+            setAvatar(avatar);
+            sb.layoutForm.txtName.setText(student.getName());
+            sb.layoutForm.txtAddress.setText(student.getAddress());
+            sb.layoutForm.txtEmail.setText(student.getEmail());
+            sb.layoutForm.txtPhonenumber.setText(String.valueOf(student.getPhonenumber()));
+            sb.layoutForm.txtWeb.setText(student.getWeb());
+        }
     }
 
     @Override
@@ -97,13 +92,13 @@ public class ProfileActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         student.setAvatar(avatar);
-        student.setName(txtName.toString());
-        student.setEmail(txtEmail.toString());
-        student.setPhonenumber(Integer.parseInt(txtPhonenumber.toString()));
-        student.setAddress(txtAddress.toString());
-        student.setWeb(txtWeb.toString());
+        student.setName(sb.layoutForm.txtName.toString());
+        student.setEmail(sb.layoutForm.txtEmail.toString());
+        student.setPhonenumber(Integer.parseInt(sb.layoutForm.txtPhonenumber.getText().toString()));
+        student.setAddress(sb.layoutForm.txtAddress.toString());
+        student.setWeb(sb.layoutForm.txtWeb.toString());
 
-        outState.putParcelable(STUDENT,student);
+        outState.putParcelable(STUDENT, student);
     }
 
     private void initListeners() {
@@ -121,8 +116,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void avatarListeners() {
-        imgAvatar.setOnClickListener(this::changeAvatar);
-        lblAvatar.setOnClickListener(this::changeAvatar);
+        sb.layoutAvatar.imgAvatar.setOnClickListener(this::changeAvatar);
+        sb.layoutAvatar.lblAvatar.setOnClickListener(this::changeAvatar);
     }
 
     private void changeAvatar(View v) {
@@ -146,14 +141,14 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setAvatar(Avatar extra_avatar) {
-        imgAvatar.setTag(extra_avatar.getImageResId());
-        imgAvatar.setImageResource(extra_avatar.getImageResId());
-        lblAvatar.setText(extra_avatar.getName());
+        sb.layoutAvatar.imgAvatar.setTag(extra_avatar.getImageResId());
+        sb.layoutAvatar.imgAvatar.setImageResource(extra_avatar.getImageResId());
+        sb.layoutAvatar.lblAvatar.setText(extra_avatar.getName());
     }
 
     private void imeListener() {
         //When pressing IME done button.
-        txtWeb.setOnEditorActionListener((v, actionId, event) -> {
+        sb.layoutForm.txtWeb.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 save();
                 hideSoftKeyboard(this);
@@ -165,29 +160,29 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void iconListeners() {
         //EMAIL
-        imgEmail.setOnClickListener(v -> {
+        sb.layoutForm.imgEmail.setOnClickListener(v -> {
             intention = new Intent(Intent.ACTION_SENDTO);
-            intention.setData(Uri.parse("mailto:" + txtEmail.getText()));
+            intention.setData(Uri.parse("mailto:" + sb.layoutForm.txtEmail.getText()));
             startActivity(intention);
         });
 
         //PHONENUMBER
-        imgPhonenumber.setOnClickListener(v -> {
+        sb.layoutForm.imgPhonenumber.setOnClickListener(v -> {
             intention = new Intent(Intent.ACTION_DIAL);
-            intention.setData(Uri.parse("tel:" + txtPhonenumber.getText()));
+            intention.setData(Uri.parse("tel:" + sb.layoutForm.txtPhonenumber.getText()));
             startActivity(intention);
         });
 
         //ADDRESS
-        imgAddress.setOnClickListener(v -> {
-            intention = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + txtAddress.getText().toString()));
+        sb.layoutForm.imgAddress.setOnClickListener(v -> {
+            intention = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + sb.layoutForm.txtAddress.getText().toString()));
             intention.setPackage("com.google.android.apps.maps");
             startActivity(intention);
         });
 
         //WEB
-        imgWeb.setOnClickListener(v -> {
-            String url = txtWeb.getText().toString();
+        sb.layoutForm.imgWeb.setOnClickListener(v -> {
+            String url = sb.layoutForm.txtWeb.getText().toString();
             if (!url.startsWith("http://") && !url.startsWith("https://")) url = "http://" + url;
             intention = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(intention);
@@ -195,11 +190,11 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void focusListeners() {
-        txtName.setOnFocusChangeListener((v, hasFocus) -> isFocused(hasFocus, lblName));
-        txtEmail.setOnFocusChangeListener((v, hasFocus) -> isFocused(hasFocus, lblEmail));
-        txtPhonenumber.setOnFocusChangeListener((v, hasFocus) -> isFocused(hasFocus, lblPhonenumber));
-        txtAddress.setOnFocusChangeListener((v, hasFocus) -> isFocused(hasFocus, lblAddress));
-        txtWeb.setOnFocusChangeListener((v, hasFocus) -> isFocused(hasFocus, lblWeb));
+        sb.layoutForm.txtName.setOnFocusChangeListener((v, hasFocus) -> isFocused(hasFocus, sb.layoutForm.lblName));
+        sb.layoutForm.txtEmail.setOnFocusChangeListener((v, hasFocus) -> isFocused(hasFocus, sb.layoutForm.lblEmail));
+        sb.layoutForm.txtPhonenumber.setOnFocusChangeListener((v, hasFocus) -> isFocused(hasFocus, sb.layoutForm.lblPhonenumber));
+        sb.layoutForm.txtAddress.setOnFocusChangeListener((v, hasFocus) -> isFocused(hasFocus, sb.layoutForm.lblAddress));
+        sb.layoutForm.txtWeb.setOnFocusChangeListener((v, hasFocus) -> isFocused(hasFocus, sb.layoutForm.lblWeb));
     }
 
     private void isFocused(boolean hasFocus, TextView lbl) {
@@ -210,39 +205,22 @@ public class ProfileActivity extends AppCompatActivity {
     @SuppressWarnings("ConstantConditions")
     private void setupViews(Bundle savedInstanceState) {
         //AVATAR
-        imgAvatar = ActivityCompat.requireViewById(this, R.id.imgAvatar);
-        lblAvatar = ActivityCompat.requireViewById(this, R.id.lblAvatar);
-        if(savedInstanceState == null){
-            setDefault(imgAvatar, lblAvatar);
-        }
-        else{
+        if (savedInstanceState == null) {
+            setDefault(sb.layoutAvatar.imgAvatar, sb.layoutAvatar.lblAvatar);
+        } else {
             avatar = savedInstanceState.getParcelable("AVATAR");
             setAvatar(avatar);
         }
         //NAME
-        lblName = ActivityCompat.requireViewById(this, R.id.lblName);
-        lblName.setTypeface(Typeface.DEFAULT_BOLD);
-        txtName = ActivityCompat.requireViewById(this, R.id.txtName);
+        sb.layoutForm.lblName.setTypeface(Typeface.DEFAULT_BOLD);
         //EMAIL
-        lblEmail = ActivityCompat.requireViewById(this, R.id.lblEmail);
-        txtEmail = ActivityCompat.requireViewById(this, R.id.txtEmail);
-        imgEmail = ActivityCompat.requireViewById(this, R.id.imgEmail);
-        imgEmail.setTag(R.drawable.ic_email_24dp);
+        sb.layoutForm.imgEmail.setTag(R.drawable.ic_email_24dp);
         //PHONENUMBER
-        lblPhonenumber = ActivityCompat.requireViewById(this, R.id.lblPhonenumber);
-        txtPhonenumber = ActivityCompat.requireViewById(this, R.id.txtPhonenumber);
-        imgPhonenumber = ActivityCompat.requireViewById(this, R.id.imgPhonenumber);
-        imgPhonenumber.setTag(R.drawable.ic_call_24dp);
+        sb.layoutForm.imgPhonenumber.setTag(R.drawable.ic_call_24dp);
         //ADDRESS
-        lblAddress = ActivityCompat.requireViewById(this, R.id.lblAddress);
-        txtAddress = ActivityCompat.requireViewById(this, R.id.txtAddress);
-        imgAddress = ActivityCompat.requireViewById(this, R.id.imgAddress);
-        imgAddress.setTag(R.drawable.ic_map_24dp);
+        sb.layoutForm.imgAddress.setTag(R.drawable.ic_map_24dp);
         //WEB
-        lblWeb = ActivityCompat.requireViewById(this, R.id.lblWeb);
-        txtWeb = ActivityCompat.requireViewById(this, R.id.txtWeb);
-        imgWeb = ActivityCompat.requireViewById(this, R.id.imgWeb);
-        imgWeb.setTag(R.drawable.ic_web_24dp);
+        sb.layoutForm.imgWeb.setTag(R.drawable.ic_web_24dp);
     }
 
     private void setDefault(ImageView imgAvatar, TextView nameAvatar) {
@@ -253,141 +231,13 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void textChangedListeners() {
-        txtName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                checkText(txtName, lblName, null, 0, count);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        txtEmail.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                checkText(txtEmail, lblEmail, imgEmail, 1, count);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        txtPhonenumber.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                checkText(txtPhonenumber, lblPhonenumber, imgPhonenumber, 2, count);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        txtAddress.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                checkText(txtAddress, lblAddress, imgAddress, 0, count);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        txtWeb.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                checkText(txtWeb, lblWeb, imgWeb, 3, count);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+        TextChangedListener.is_changed(sb.layoutForm.txtName, sb.layoutForm.lblName, null, 0);
+        TextChangedListener.is_changed(sb.layoutForm.txtEmail, sb.layoutForm.lblEmail, sb.layoutForm.imgEmail, 1);
+        TextChangedListener.is_changed(sb.layoutForm.txtPhonenumber, sb.layoutForm.lblPhonenumber, sb.layoutForm.imgPhonenumber, 2);
+        TextChangedListener.is_changed(sb.layoutForm.txtAddress, sb.layoutForm.lblAddress, sb.layoutForm.imgAddress, 4);
+        TextChangedListener.is_changed(sb.layoutForm.txtWeb, sb.layoutForm.lblWeb, sb.layoutForm.imgWeb, 3);
     }
 
-    private void checkText(EditText txt, TextView lbl, ImageView img, int i, int count) {
-        switch (i) {
-            case 0:
-                if (img == null) {
-                    if (count == 0) {
-                        txt.setError(getString(R.string.main_invalid_data));
-                        lbl.setEnabled(false);
-                    } else {
-                        lbl.setEnabled(true);
-                    }
-                } else {
-                    if (count == 0) {
-                        txt.setError(getString(R.string.main_invalid_data));
-                        lbl.setEnabled(false);
-                        img.setEnabled(false);
-                    } else {
-                        lbl.setEnabled(true);
-                        img.setEnabled(true);
-                    }
-                }
-                break;
-            case 1:
-                if (!ValidationUtils.isValidEmail(txt.getText().toString())) {
-                    txt.setError(getString(R.string.main_invalid_data));
-                    lbl.setEnabled(false);
-                    img.setEnabled(false);
-                } else {
-                    lbl.setEnabled(true);
-                    img.setEnabled(true);
-                }
-                break;
-            case 2:
-                if (!ValidationUtils.isValidPhone(txt.getText().toString())) {
-                    txt.setError(getString(R.string.main_invalid_data));
-                    lbl.setEnabled(false);
-                    img.setEnabled(false);
-                } else {
-                    lbl.setEnabled(true);
-                    img.setEnabled(true);
-                }
-                break;
-            case 3:
-                if (!ValidationUtils.isValidUrl(txt.getText().toString())) {
-                    txt.setError(getString(R.string.main_invalid_data));
-                    lbl.setEnabled(false);
-                    img.setEnabled(false);
-                } else {
-                    lbl.setEnabled(true);
-                    img.setEnabled(true);
-                }
-                break;
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -405,21 +255,22 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void save() {
-        if (!ValidationUtils.isValidForm(txtEmail.getText().toString(), txtPhonenumber.getText().toString(), txtWeb.getText().toString(),
-                txtName.getText().toString(), txtAddress.getText().toString())) {
-            Snackbar.make(txtWeb, getString(R.string.main_saved_succesfully), Snackbar.LENGTH_SHORT).show();
-        } else{
+        if (!ValidationUtils.isValidForm(sb.layoutForm.txtEmail.getText().toString(), sb.layoutForm.txtPhonenumber.getText().toString(), sb.layoutForm.txtWeb.getText().toString(),
+                sb.layoutForm.txtName.getText().toString(), sb.layoutForm.txtAddress.getText().toString())) {
+            Snackbar.make(sb.layoutForm.txtWeb, getString(R.string.main_saved_succesfully), Snackbar.LENGTH_SHORT).show();
+        } else {
             showErrors();
-            Snackbar.make(txtWeb, getString(R.string.main_error_saving), Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(sb.layoutForm.txtWeb, getString(R.string.main_error_saving), Snackbar.LENGTH_SHORT).show();
         }
 
     }
 
     private void showErrors() {
-        if (!ValidationUtils.isValidText(txtName.getText().toString())) txtName.setText("");
-        if (!ValidationUtils.isValidEmail(txtEmail.getText().toString())) txtEmail.setText("");
-        if (!ValidationUtils.isValidPhone(txtPhonenumber.getText().toString())) txtPhonenumber.setText("");
-        if (!ValidationUtils.isValidText(txtAddress.getText().toString())) txtAddress.setText("");
-        if (!ValidationUtils.isValidUrl(txtWeb.getText().toString())) txtWeb.setText("");
+        if (!ValidationUtils.isValidText(sb.layoutForm.txtName.getText().toString())) sb.layoutForm.txtName.setText("");
+        if (!ValidationUtils.isValidEmail(sb.layoutForm.txtEmail.getText().toString())) sb.layoutForm.txtEmail.setText("");
+        if (!ValidationUtils.isValidPhone(sb.layoutForm.txtPhonenumber.getText().toString()))
+            sb.layoutForm.txtPhonenumber.setText("");
+        if (!ValidationUtils.isValidText(sb.layoutForm.txtAddress.getText().toString())) sb.layoutForm.txtAddress.setText("");
+        if (!ValidationUtils.isValidUrl(sb.layoutForm.txtWeb.getText().toString())) sb.layoutForm.txtWeb.setText("");
     }
 }
