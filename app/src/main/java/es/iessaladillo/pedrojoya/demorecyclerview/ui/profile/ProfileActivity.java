@@ -258,11 +258,25 @@ public class ProfileActivity extends AppCompatActivity {
         if (!ValidationUtils.isValidForm(sb.layoutForm.txtEmail.getText().toString(), sb.layoutForm.txtPhonenumber.getText().toString(), sb.layoutForm.txtWeb.getText().toString(),
                 sb.layoutForm.txtName.getText().toString(), sb.layoutForm.txtAddress.getText().toString())) {
             Snackbar.make(sb.layoutForm.txtWeb, getString(R.string.main_saved_succesfully), Snackbar.LENGTH_SHORT).show();
+            sendStudent();
         } else {
             showErrors();
             Snackbar.make(sb.layoutForm.txtWeb, getString(R.string.main_error_saving), Snackbar.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void sendStudent() {
+        student.setAvatar(avatar);
+        student.setName(sb.layoutForm.txtName.getText().toString());
+        student.setEmail(sb.layoutForm.txtEmail.getText().toString());
+        student.setPhonenumber(Integer.parseInt(sb.layoutForm.txtPhonenumber.getText().toString()));
+        student.setAddress(sb.layoutForm.txtAddress.getText().toString());
+        student.setWeb(sb.layoutForm.txtWeb.getText().toString());
+        intention = new Intent();
+        intention.putExtra(STUDENT,student);
+        setResult(RESULT_OK,intention);
+        finish();
     }
 
     private void showErrors() {

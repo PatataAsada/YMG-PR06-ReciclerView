@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         // TODO: Give lifecycle to binding.
         setupViews();
         observeStudents();
-        
+
         // TODO: Observe emptyView visibility state.
     }
 
@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
             Intent student = new Intent(v.getContext(), ProfileActivity.class);
             startActivityForResult(student, ADD_STUDENT_REQUEST);
             onActivityResult(ADD_STUDENT_REQUEST, RESULT_OK, student);
-            viewModel.addStudent(newStudent);
         });
     }
 
@@ -80,7 +79,9 @@ public class MainActivity extends AppCompatActivity {
         student.putExtra(STUDENT, item);
         startActivityForResult(student, EDIT_USER_REQUEST);
         onActivityResult(EDIT_USER_REQUEST, RESULT_OK, student);
-        viewModel.editStudent(item,newStudent);
+        if(newStudent!=null){
+            viewModel.editStudent(item,newStudent);
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -91,11 +92,14 @@ public class MainActivity extends AppCompatActivity {
             case EDIT_USER_REQUEST:
                 if (resultCode == RESULT_OK) {
                     setNewStudent(data.getParcelableExtra(STUDENT));
+                }else{
+                    setNewStudent(null);
                 }
                 break;
             case ADD_STUDENT_REQUEST:
                 if (resultCode == RESULT_OK) {
                     setNewStudent(data.getParcelableExtra(STUDENT));
+                    viewModel.addStudent(newStudent);
                 }
         }
     }

@@ -38,8 +38,7 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public void editStudent(Student oldStudent, Student newStudent) {
-        databaseStudents.deleteStudent(oldStudent);
-        databaseStudents.addStudent(newStudent);
+        students.getValue().set(students.getValue().indexOf(oldStudent),newStudent);
     }
 
     public void addStudent(Student newStudent) {
