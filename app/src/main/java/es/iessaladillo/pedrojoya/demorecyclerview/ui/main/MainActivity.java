@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import java.util.List;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -37,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
         // TODO: Give lifecycle to binding.
         setupViews();
         observeStudents();
-
-        // TODO: Observe emptyView visibility state.
     }
 
     private void observeStudents() {

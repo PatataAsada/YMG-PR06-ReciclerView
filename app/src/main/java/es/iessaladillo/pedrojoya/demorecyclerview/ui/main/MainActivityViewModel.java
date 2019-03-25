@@ -43,6 +43,5 @@ public class MainActivityViewModel extends ViewModel {
 
     public void addStudent(Student newStudent) {
         databaseStudents.addStudent(newStudent);
-        students = databaseStudents.getStudents();
     }
 }
