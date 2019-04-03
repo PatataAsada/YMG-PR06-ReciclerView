@@ -16,10 +16,10 @@ public class DatabaseStudents {
     }
 
     private ArrayList<Student> students = new ArrayList<>(Arrays.asList(
-            new Student(0, 1, "Baldo", "baldo@hotmail.com", 999999, "casa", "www.miweb.es"),
-            new Student(1, 2, "Albedo", "baldo@hotmail.com", 999999, "casa", "www.miweb.es"),
-            new Student(2, 3, "Pipo", "baldo@hotmail.com",999999,"casa","www.miweb.es"),
-            new Student(3, 4, "German",  "baldo@hotmail.com",999999,"casa","www.miweb.es")
+            new Student( 1, "Baldo", "baldo@hotmail.com", 999999, "casa", "www.miweb.es"),
+            new Student( 2, "Albedo", "baldo@hotmail.com", 999999, "casa", "www.miweb.es"),
+            new Student( 3, "Pipo", "baldo@hotmail.com",999999,"casa","www.miweb.es"),
+            new Student( 4, "German",  "baldo@hotmail.com",999999,"casa","www.miweb.es")
     ));
     private MutableLiveData<List<Student>> studentsLiveData = new MutableLiveData<>();
 
@@ -37,7 +37,14 @@ public class DatabaseStudents {
     }
 
     public void addStudent(Student newStudent) {
-        students.add(newStudent);
+        if(newStudent!=null) {
+            students.add(newStudent);
+            updateStudentsLiveData();
+        }
+    }
+
+    public void editStudent(int oldstudentindex, Student newStudent) {
+        students.set(oldstudentindex,newStudent);
         updateStudentsLiveData();
     }
 }

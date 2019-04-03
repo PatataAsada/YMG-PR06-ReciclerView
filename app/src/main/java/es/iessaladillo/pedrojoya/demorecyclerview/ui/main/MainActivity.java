@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import java.util.List;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -26,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding db;
     private MainActivityViewModel viewModel;
     private MainActivityAdapter listAdapter;
-    public Student newStudent;
+    public Student oldStudent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +32,6 @@ public class MainActivity extends AppCompatActivity {
         db = DataBindingUtil.setContentView(this, R.layout.activity_main);
         viewModel = ViewModelProviders.of(this, new MainActivityViewModelFactory(new DatabaseStudents())).get(MainActivityViewModel.class);
 
-
-        // TODO: Give viewModel to binding.
-        // TODO: Give lifecycle to binding.
         setupViews();
         observeStudents();
     }
@@ -52,14 +47,22 @@ public class MainActivity extends AppCompatActivity {
     private void setupViews() {
         setupRecyclerView();
         setupFAB();
+        setupEmptyView();
+    }
+
+    private void setupEmptyView() {
+        db.lblEmptyView.setOnClickListener(this::addStudent);
     }
 
     private void setupFAB() {
-        db.fabAdd.setOnClickListener(v -> {
-            Intent student = new Intent(v.getContext(), ProfileActivity.class);
-            startActivityForResult(student, ADD_STUDENT_REQUEST);
-            onActivityResult(ADD_STUDENT_REQUEST, RESULT_OK, student);
-        });
+        db.fabAdd.setOnClickListener(this::addStudent);
+    }
+
+    private void addStudent(View v) {
+        Intent student = new Intent(v.getContext(), ProfileActivity.class);
+        startActivityForResult(student,ADD_STUDENT_REQUEST);
+
+        onActivityResult(ADD_STUDENT_REQUEST, RESULT_OK, student);
     }
 
     private void setupRecyclerView() {
@@ -75,36 +78,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void editStudent(Student item) {
-        Intent student = new Intent(this,ProfileActivity.class);
+        Intent student = new Intent(this, ProfileActivity.class);
         student.putExtra(STUDENT, item);
         startActivityForResult(student, EDIT_USER_REQUEST);
+        oldStudent = item;
         onActivityResult(EDIT_USER_REQUEST, RESULT_OK, student);
-        if(newStudent!=null){
-            viewModel.editStudent(item,newStudent);
-        }
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
+        switch (requestCode) {
             case EDIT_USER_REQUEST:
                 if (resultCode == RESULT_OK) {
-                    setNewStudent(data.getParcelableExtra(STUDENT));
-                }else{
-                    setNewStudent(null);
+                    viewModel.editStudent(oldStudent, data.getParcelableExtra(STUDENT));
                 }
                 break;
             case ADD_STUDENT_REQUEST:
                 if (resultCode == RESULT_OK) {
-                    setNewStudent(data.getParcelableExtra(STUDENT));
-                    viewModel.addStudent(newStudent);
+                    viewModel.addStudent(data.getParcelableExtra(STUDENT));
                 }
         }
-    }
-
-    private void setNewStudent(Student student) {
-        newStudent = student;
     }
 }

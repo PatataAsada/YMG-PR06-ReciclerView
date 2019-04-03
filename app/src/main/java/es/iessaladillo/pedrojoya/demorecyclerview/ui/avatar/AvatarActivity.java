@@ -4,12 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import es.iessaladillo.pedrojoya.demorecyclerview.R;
 import es.iessaladillo.pedrojoya.demorecyclerview.data.local.Database;
@@ -134,11 +131,17 @@ public class AvatarActivity extends AppCompatActivity {
 
     private void initViews() {
         ab.imgAvatar1.setTag(R.id.imgAvatar1);
+        ab.imgAvatar1.setImageResource(R.drawable.cat1);
         ab.imgAvatar2.setTag(R.id.imgAvatar2);
+        ab.imgAvatar1.setImageResource(R.drawable.cat2);
         ab.imgAvatar3.setTag(R.id.imgAvatar3);
+        ab.imgAvatar1.setImageResource(R.drawable.cat3);
         ab.imgAvatar4.setTag(R.id.imgAvatar4);
+        ab.imgAvatar1.setImageResource(R.drawable.cat4);
         ab.imgAvatar5.setTag(R.id.imgAvatar5);
+        ab.imgAvatar1.setImageResource(R.drawable.cat5);
         ab.imgAvatar6.setTag(R.id.imgAvatar6);
+        ab.imgAvatar1.setImageResource(R.drawable.cat6);
     }
 
     @Override

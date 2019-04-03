@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import es.iessaladillo.pedrojoya.demorecyclerview.data.local.DatabaseStudents;
 
-// TODO: Make class implements ViewModelProvider.Factory
 @SuppressWarnings("WeakerAccess")
 public class MainActivityViewModelFactory implements ViewModelProvider.Factory {
 

@@ -1,5 +1,6 @@
 package es.iessaladillo.pedrojoya.demorecyclerview.ui.main;
 
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +11,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import es.iessaladillo.pedrojoya.demorecyclerview.R;
 import es.iessaladillo.pedrojoya.demorecyclerview.data.local.model.Student;
+import es.iessaladillo.pedrojoya.demorecyclerview.databinding.ActivityMainItemBinding;
 
 public class MainActivityAdapter extends ListAdapter<Student, MainActivityAdapter.ViewHolder> {
     private final OnEditStudentClickListener onEditStudentClickListener;

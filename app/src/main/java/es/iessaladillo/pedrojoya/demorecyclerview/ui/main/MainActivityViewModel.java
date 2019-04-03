@@ -1,22 +1,15 @@
 package es.iessaladillo.pedrojoya.demorecyclerview.ui.main;
 
-import android.content.Context;
-import android.content.Intent;
-
 import java.util.List;
+import java.util.Objects;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import es.iessaladillo.pedrojoya.demorecyclerview.data.local.DatabaseStudents;
 import es.iessaladillo.pedrojoya.demorecyclerview.data.local.model.Student;
-import es.iessaladillo.pedrojoya.demorecyclerview.ui.profile.ProfileActivity;
-
-import static android.app.Activity.RESULT_OK;
 
 @SuppressWarnings("WeakerAccess")
 public class MainActivityViewModel extends ViewModel {
-    private static final String STUDENT = "STUDENT";
-    private static final Object EDIT_USER_REQUEST = 1;
     private final DatabaseStudents databaseStudents;
     private LiveData<List<Student>> students;
 
@@ -38,7 +31,8 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public void editStudent(Student oldStudent, Student newStudent) {
-        students.getValue().set(students.getValue().indexOf(oldStudent),newStudent);
+        int oldstudentindex = students.getValue().indexOf(oldStudent);
+        databaseStudents.editStudent(oldstudentindex,newStudent);
     }
 
     public void addStudent(Student newStudent) {

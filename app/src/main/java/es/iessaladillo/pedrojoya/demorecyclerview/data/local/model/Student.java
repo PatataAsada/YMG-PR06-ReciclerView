@@ -9,6 +9,7 @@ import es.iessaladillo.pedrojoya.demorecyclerview.data.local.Database;
 public class Student implements Parcelable {
 
     // TODO: Define Student properties.
+    private static long longid;
     private long id;
     private Avatar avatar;
     private String name;
@@ -17,8 +18,8 @@ public class Student implements Parcelable {
     private String address;
     private String web;
 
-    public Student(long id, int imageResId, String name, String email, int phonenumber, String address, String web) {
-        this.id = id;
+    public Student(int imageResId, String name, String email, int phonenumber, String address, String web) {
+        this.id = this.longid++;
         this.avatar = Database.getInstance().queryAvatars().get(imageResId);
         this.name = name;
         this.email = email;
@@ -48,6 +49,16 @@ public class Student implements Parcelable {
             return new Student[size];
         }
     };
+
+    public Student() {
+        id = longid++;
+        avatar = null;
+        name = null;
+        email = null;
+        phonenumber = -1;
+        address = null;
+        web = null;
+    }
 
     public int getPhonenumber() {
         return phonenumber;
@@ -113,11 +124,17 @@ public class Student implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
-        dest.writeParcelable(avatar,flags);
+        dest.writeParcelable(avatar, flags);
         dest.writeString(name);
         dest.writeString(email);
         dest.writeInt(phonenumber);
         dest.writeString(address);
         dest.writeString(web);
+    }
+
+    public boolean isEmpty() {
+        if (getId() < 0 && getName() == null && getAddress() == null || getAddress() == null || getAvatar() == null || getEmail() == null || getPhonenumber() < 0 || getWeb() == null)
+            return true;
+        else return false;
     }
 }

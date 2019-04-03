@@ -4,13 +4,10 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,12 +17,11 @@ import java.util.Objects;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
 import es.iessaladillo.pedrojoya.demorecyclerview.R;
 import es.iessaladillo.pedrojoya.demorecyclerview.data.local.Database;
 import es.iessaladillo.pedrojoya.demorecyclerview.data.local.model.Avatar;
-import es.iessaladillo.pedrojoya.demorecyclerview.data.local.model.Student;
 import es.iessaladillo.pedrojoya.demorecyclerview.databinding.ActivityStudentBinding;
 import es.iessaladillo.pedrojoya.demorecyclerview.ui.avatar.AvatarActivity;
 import es.iessaladillo.pedrojoya.demorecyclerview.utils.TextChangedListener;
@@ -40,44 +36,32 @@ public class ProfileActivity extends AppCompatActivity {
     private static final String EXTRA_AVATAR = "EXTRA_AVATAR";
     private ActivityStudentBinding sb;
     final int PICK_AVATAR_REQUEST = 1;
-    private Avatar avatar = Database.getInstance().queryAvatar(1);
     private Intent intention;
     @SuppressWarnings("FieldCanBeLocal")
-    private Intent oldStudent;
-    private Student student;
+    private ProfileActivityViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        student = new Student(0,1, "", "", 0,"","");
+        viewModel = ViewModelProviders.of(this, new ProfileActivityViewModelFactory(getIntent().getParcelableExtra(STUDENT))).get(ProfileActivityViewModel.class);
         sb = DataBindingUtil.setContentView(this, R.layout.activity_student);
         setupViews(savedInstanceState);
         initListeners();
-        initIntent(savedInstanceState);
+        fillViewsWithViewModel();
     }
 
     @SuppressWarnings("ConstantConditions")
-    private void initIntent(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            Student currentStudent = getIntent().getParcelableExtra(STUDENT);
-            if(currentStudent!=null) {
-                student = oldStudent.getParcelableExtra(STUDENT);
+    private void fillViewsWithViewModel() {
+
+        if (viewModel.student != null) {
+            setAvatar(viewModel.avatar);
+            sb.layoutForm.txtName.setText(viewModel.student.getName());
+            sb.layoutForm.txtAddress.setText(viewModel.student.getAddress());
+            sb.layoutForm.txtEmail.setText(viewModel.student.getEmail());
+            if(!(viewModel.student.getPhonenumber()<0)){
+                sb.layoutForm.txtPhonenumber.setText(String.valueOf(viewModel.student.getPhonenumber()));
             }
-            if(student!=null) {
-                avatar = student.getAvatar();
-            }
-        } else {
-            oldStudent = savedInstanceState.getParcelable(STUDENT);
-            student = oldStudent.getParcelableExtra(STUDENT);
-            avatar = student.getAvatar();
-        }
-        if(student!=null) {
-            setAvatar(avatar);
-            sb.layoutForm.txtName.setText(student.getName());
-            sb.layoutForm.txtAddress.setText(student.getAddress());
-            sb.layoutForm.txtEmail.setText(student.getEmail());
-            sb.layoutForm.txtPhonenumber.setText(String.valueOf(student.getPhonenumber()));
-            sb.layoutForm.txtWeb.setText(student.getWeb());
+            sb.layoutForm.txtWeb.setText(viewModel.student.getWeb());
         }
     }
 
@@ -91,14 +75,14 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        student.setAvatar(avatar);
-        student.setName(sb.layoutForm.txtName.toString());
-        student.setEmail(sb.layoutForm.txtEmail.toString());
-        student.setPhonenumber(Integer.parseInt(sb.layoutForm.txtPhonenumber.getText().toString()));
-        student.setAddress(sb.layoutForm.txtAddress.toString());
-        student.setWeb(sb.layoutForm.txtWeb.toString());
-
-        outState.putParcelable(STUDENT, student);
+        viewModel.student.setAvatar(viewModel.avatar);
+        viewModel.student.setName(sb.layoutForm.txtName.toString());
+        viewModel.student.setEmail(sb.layoutForm.txtEmail.toString());
+        if(sb.layoutForm.txtPhonenumber.toString().isEmpty()){
+            viewModel.student.setPhonenumber(Integer.parseInt(sb.layoutForm.txtPhonenumber.getText().toString()));
+        }
+        viewModel.student.setAddress(sb.layoutForm.txtAddress.toString());
+        viewModel.student.setWeb(sb.layoutForm.txtWeb.toString());
     }
 
     private void initListeners() {
@@ -123,7 +107,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void changeAvatar(View v) {
         intention = new Intent(v.getContext(), AvatarActivity.class);
 
-        intention.putExtra(EXTRA_AVATAR, avatar);
+        intention.putExtra(EXTRA_AVATAR, viewModel.avatar);
         startActivityForResult(intention, PICK_AVATAR_REQUEST);
 
         onActivityResult(PICK_AVATAR_REQUEST, RESULT_OK, intention);
@@ -134,8 +118,9 @@ public class ProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_AVATAR_REQUEST) {
             if (resultCode == RESULT_OK) {
-                avatar = Database.getInstance().queryAvatar(((Avatar) Objects.requireNonNull(data).getParcelableExtra("EXTRA_AVATAR")).getId());
-                setAvatar(avatar);
+                viewModel.avatar = Database.getInstance().queryAvatar(((Avatar) Objects.requireNonNull(data).getParcelableExtra("EXTRA_AVATAR")).getId());
+                viewModel.student.setAvatar(viewModel.avatar);
+                setAvatar(viewModel.avatar);
             }
         }
     }
@@ -205,12 +190,7 @@ public class ProfileActivity extends AppCompatActivity {
     @SuppressWarnings("ConstantConditions")
     private void setupViews(Bundle savedInstanceState) {
         //AVATAR
-        if (savedInstanceState == null) {
-            setDefault(sb.layoutAvatar.imgAvatar, sb.layoutAvatar.lblAvatar);
-        } else {
-            avatar = savedInstanceState.getParcelable("AVATAR");
-            setAvatar(avatar);
-        }
+        setAvatar(viewModel.avatar);
         //NAME
         sb.layoutForm.lblName.setTypeface(Typeface.DEFAULT_BOLD);
         //EMAIL
@@ -267,24 +247,28 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void sendStudent() {
-        student.setAvatar(avatar);
-        student.setName(sb.layoutForm.txtName.getText().toString());
-        student.setEmail(sb.layoutForm.txtEmail.getText().toString());
-        student.setPhonenumber(Integer.parseInt(sb.layoutForm.txtPhonenumber.getText().toString()));
-        student.setAddress(sb.layoutForm.txtAddress.getText().toString());
-        student.setWeb(sb.layoutForm.txtWeb.getText().toString());
+        viewModel.student.setAvatar(viewModel.avatar);
+        viewModel.student.setName(sb.layoutForm.txtName.getText().toString());
+        viewModel.student.setEmail(sb.layoutForm.txtEmail.getText().toString());
+        viewModel.student.setPhonenumber(Integer.parseInt(sb.layoutForm.txtPhonenumber.getText().toString()));
+        viewModel.student.setAddress(sb.layoutForm.txtAddress.getText().toString());
+        viewModel.student.setWeb(sb.layoutForm.txtWeb.getText().toString());
         intention = new Intent();
-        intention.putExtra(STUDENT,student);
-        setResult(RESULT_OK,intention);
+        intention.putExtra(STUDENT, viewModel.student);
+        setResult(RESULT_OK, intention);
         finish();
     }
 
     private void showErrors() {
-        if (!ValidationUtils.isValidText(sb.layoutForm.txtName.getText().toString())) sb.layoutForm.txtName.setText("");
-        if (!ValidationUtils.isValidEmail(sb.layoutForm.txtEmail.getText().toString())) sb.layoutForm.txtEmail.setText("");
+        if (!ValidationUtils.isValidText(sb.layoutForm.txtName.getText().toString()))
+            sb.layoutForm.txtName.setText("");
+        if (!ValidationUtils.isValidEmail(sb.layoutForm.txtEmail.getText().toString()))
+            sb.layoutForm.txtEmail.setText("");
         if (!ValidationUtils.isValidPhone(sb.layoutForm.txtPhonenumber.getText().toString()))
             sb.layoutForm.txtPhonenumber.setText("");
-        if (!ValidationUtils.isValidText(sb.layoutForm.txtAddress.getText().toString())) sb.layoutForm.txtAddress.setText("");
-        if (!ValidationUtils.isValidUrl(sb.layoutForm.txtWeb.getText().toString())) sb.layoutForm.txtWeb.setText("");
+        if (!ValidationUtils.isValidText(sb.layoutForm.txtAddress.getText().toString()))
+            sb.layoutForm.txtAddress.setText("");
+        if (!ValidationUtils.isValidUrl(sb.layoutForm.txtWeb.getText().toString()))
+            sb.layoutForm.txtWeb.setText("");
     }
 }
