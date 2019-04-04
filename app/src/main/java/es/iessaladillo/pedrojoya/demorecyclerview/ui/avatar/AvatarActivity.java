@@ -2,8 +2,10 @@ package es.iessaladillo.pedrojoya.demorecyclerview.ui.avatar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +32,6 @@ public class AvatarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ab = DataBindingUtil.setContentView(this, R.layout.activity_avatar);
-        setContentView(R.layout.activity_avatar);
         initViews();
         initListeners();
         initIntent(savedInstanceState);
@@ -159,5 +160,6 @@ public class AvatarActivity extends AppCompatActivity {
         onBackPressed();
         return true;
     }
+
 
 }
