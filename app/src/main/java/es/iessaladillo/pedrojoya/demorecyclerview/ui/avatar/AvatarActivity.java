@@ -45,7 +45,6 @@ public class AvatarActivity extends AppCompatActivity {
 
     private void initIntent(Bundle savedInstanceState) {
         if(savedInstanceState==null){
-            extra_avatar = getIntent();
             avatar = extra_avatar.getParcelableExtra("EXTRA_AVATAR");
             selectedAvatar((int) avatar.getId());
         }else{

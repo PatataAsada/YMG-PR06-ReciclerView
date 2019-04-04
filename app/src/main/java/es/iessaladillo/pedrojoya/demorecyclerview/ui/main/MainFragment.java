@@ -17,9 +17,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import es.iessaladillo.pedrojoya.demorecyclerview.R;
-import es.iessaladillo.pedrojoya.demorecyclerview.data.local.DatabaseStudents;
 import es.iessaladillo.pedrojoya.demorecyclerview.data.local.model.Student;
-import es.iessaladillo.pedrojoya.demorecyclerview.databinding.ActivityMainBinding;
 import es.iessaladillo.pedrojoya.demorecyclerview.databinding.MainFragmentBinding;
 import es.iessaladillo.pedrojoya.demorecyclerview.ui.profile.ProfileActivity;
 
@@ -34,7 +32,7 @@ public class MainFragment extends Fragment {
     private MainActivityAdapter listAdapter;
     public Student oldStudent;
 
-    private MainFragmentViewModel viewModel;
+    private MainFragmentViewModel mainFragmentViewModel;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -50,13 +48,13 @@ public class MainFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         db = DataBindingUtil.setContentView(getActivity(), R.layout.main_fragment);
-        viewModel = ViewModelProviders.of(this).get(MainFragmentViewModel.class);
+        mainFragmentViewModel = ViewModelProviders.of(this).get(MainFragmentViewModel.class);
 
         setupViews();
         observeStudents();
     }
     private void observeStudents() {
-        viewModel.getStudents(true).observe(this, students -> {
+        mainFragmentViewModel.getStudents(true).observe(this, students -> {
             listAdapter.submitList(students);
             db.lblEmptyView.setVisibility(students.size() == 0 ? View.VISIBLE : View.INVISIBLE);
         });
@@ -91,7 +89,7 @@ public class MainFragment extends Fragment {
     }
 
     private void deleteStudent(Student item) {
-        viewModel.deleteStudent(item);
+        mainFragmentViewModel.deleteStudent(item);
     }
 
     private void editStudent(Student item) {
@@ -109,12 +107,12 @@ public class MainFragment extends Fragment {
         switch (requestCode) {
             case EDIT_USER_REQUEST:
                 if (resultCode == RESULT_OK) {
-                    viewModel.editStudent(oldStudent, data.getParcelableExtra(STUDENT));
+                    mainFragmentViewModel.editStudent(oldStudent, data.getParcelableExtra(STUDENT));
                 }
                 break;
             case ADD_STUDENT_REQUEST:
                 if (resultCode == RESULT_OK) {
-                    viewModel.addStudent(data.getParcelableExtra(STUDENT));
+                    mainFragmentViewModel.addStudent(data.getParcelableExtra(STUDENT));
                 }
         }
     }
