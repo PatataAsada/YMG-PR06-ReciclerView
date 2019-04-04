@@ -48,7 +48,7 @@ public class MainFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         db = DataBindingUtil.setContentView(getActivity(), R.layout.main_fragment);
-        mainFragmentViewModel = ViewModelProviders.of(this).get(MainFragmentViewModel.class);
+        mainFragmentViewModel = ViewModelProviders.of(getActivity()).get(MainFragmentViewModel.class);
 
         setupViews();
         observeStudents();

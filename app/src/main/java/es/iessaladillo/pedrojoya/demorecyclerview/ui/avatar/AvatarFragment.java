@@ -1,25 +1,24 @@
 package es.iessaladillo.pedrojoya.demorecyclerview.ui.avatar;
 
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import es.iessaladillo.pedrojoya.demorecyclerview.R;
 import es.iessaladillo.pedrojoya.demorecyclerview.databinding.AvatarFragmentBinding;
+import es.iessaladillo.pedrojoya.demorecyclerview.ui.profile.ProfileViewModel;
 
 public class AvatarFragment extends Fragment {
 
     private AvatarViewModel avatarViewModel;
+    private ProfileViewModel profileViewModel;
     private AvatarFragmentBinding avatarFragmentBinding;
     private Intent extra_avatar;
 
@@ -37,20 +36,12 @@ public class AvatarFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         avatarFragmentBinding = DataBindingUtil.setContentView(getActivity(),R.layout.avatar_fragment);
-        avatarViewModel = ViewModelProviders.of(this).get(AvatarViewModel.class);
+        avatarViewModel = ViewModelProviders.of(getActivity()).get(AvatarViewModel.class);
+        profileViewModel = ViewModelProviders.of(getActivity()).get(ProfileViewModel.class);
         initIntent();
-        initViews();
-        initListeners();
     }
 
-    private void initIntent(Bundle savedInstanceState) {
-        if(savedInstanceState==null){
-            extra_avatar = getIntent();
-            avatar = extra_avatar.getParcelableExtra("EXTRA_AVATAR");
-            selectedAvatar((int) avatar.getId());
-        }else{
-            chosenAvatar = savedInstanceState.getInt("CHOSENAVATAR",0);
-            selectedAvatar(chosenAvatar);
-        }
+    private void initIntent() {
+
     }
 }
