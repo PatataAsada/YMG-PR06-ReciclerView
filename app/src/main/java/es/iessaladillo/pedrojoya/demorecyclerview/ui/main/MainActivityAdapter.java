@@ -1,6 +1,5 @@
 package es.iessaladillo.pedrojoya.demorecyclerview.ui.main;
 
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.zip.Inflater;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
@@ -47,8 +48,9 @@ public class MainActivityAdapter extends ListAdapter<Student, MainActivityAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.activity_main_item, parent, false), onEditStudentClickListener, onDeleteStudentClickListener);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        ActivityMainItemBinding mainItemBinding = ActivityMainItemBinding.inflate(inflater,parent,true);
+        return new ViewHolder(mainItemBinding, onEditStudentClickListener, onDeleteStudentClickListener);
     }
 
     @Override
@@ -69,30 +71,19 @@ public class MainActivityAdapter extends ListAdapter<Student, MainActivityAdapte
     @SuppressWarnings("WeakerAccess")
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final ImageView imgAvatar;
-        private final TextView lblName;
-        private final TextView lblEmail;
-        private final TextView lblPhonenumber;
-        private final Button btnEdit;
-        private final Button btnDelete;
-
-        public ViewHolder(View itemView, final OnEditStudentClickListener onEditStudentClickListener, final OnDeleteStudentClickListener onDeleteStudentClickListener) {
-            super(itemView);
-            imgAvatar = ViewCompat.requireViewById(itemView, R.id.imgAvatar);
-            lblName = ViewCompat.requireViewById(itemView, R.id.lblName);
-            lblPhonenumber = ViewCompat.requireViewById(itemView, R.id.lblPhonenumber);
-            lblEmail = ViewCompat.requireViewById(itemView, R.id.lblEmail);
-            btnDelete = ViewCompat.requireViewById(itemView, R.id.btnDelete);
-            btnEdit = ViewCompat.requireViewById(itemView, R.id.btnEdit);
-            btnEdit.setOnClickListener(v -> onEditStudentClickListener.onItemClick(getAdapterPosition()));
-            btnDelete.setOnClickListener(v -> onDeleteStudentClickListener.onItemClick(getAdapterPosition()));
+        ActivityMainItemBinding mainItemBinding;
+        public ViewHolder(ActivityMainItemBinding mainItemBinding, final OnEditStudentClickListener onEditStudentClickListener, final OnDeleteStudentClickListener onDeleteStudentClickListener) {
+            super(mainItemBinding.getRoot());
+            this.mainItemBinding = mainItemBinding;
+            mainItemBinding.btnEdit.setOnClickListener(v -> onEditStudentClickListener.onItemClick(getAdapterPosition()));
+            mainItemBinding.btnDelete.setOnClickListener(v -> onDeleteStudentClickListener.onItemClick(getAdapterPosition()));
         }
 
         public void bind(Student student) {
-            imgAvatar.setImageResource(student.getAvatar().getImageResId());
-            lblName.setText(student.getName());
-            lblEmail.setText(student.getEmail());
-            lblPhonenumber.setText(String.valueOf(student.getPhonenumber()));
+            mainItemBinding.imgAvatar.setImageResource(student.getAvatar().getImageResId());
+            mainItemBinding.lblName.setText(student.getName());
+            mainItemBinding.lblEmail.setText(student.getEmail());
+            mainItemBinding.lblPhonenumber.setText(String.valueOf(student.getPhonenumber()));
         }
     }
 

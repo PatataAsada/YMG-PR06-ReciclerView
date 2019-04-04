@@ -22,83 +22,12 @@ public class MainActivity extends AppCompatActivity {
     private static final int EDIT_USER_REQUEST = 1;
     private static final int ADD_STUDENT_REQUEST = 2;
     private ActivityMainBinding db;
-    private MainActivityViewModel viewModel;
-    private MainActivityAdapter listAdapter;
-    public Student oldStudent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = DataBindingUtil.setContentView(this, R.layout.activity_main);
         viewModel = ViewModelProviders.of(this, new MainActivityViewModelFactory(new DatabaseStudents())).get(MainActivityViewModel.class);
-        
-        setupViews();
-        observeStudents();
-    }
 
-    private void observeStudents() {
-        viewModel.getStudents(true).observe(this, students -> {
-            listAdapter.submitList(students);
-            db.lblEmptyView.setVisibility(students.size() == 0 ? View.VISIBLE : View.INVISIBLE);
-        });
-
-    }
-
-    private void setupViews() {
-        setupRecyclerView();
-        setupFAB();
-        setupEmptyView();
-    }
-
-    private void setupEmptyView() {
-        db.lblEmptyView.setOnClickListener(this::addStudent);
-    }
-
-    private void setupFAB() {
-        db.fabAdd.setOnClickListener(this::addStudent);
-    }
-
-    private void addStudent(View v) {
-        Intent student = new Intent(v.getContext(), ProfileActivity.class);
-        startActivityForResult(student,ADD_STUDENT_REQUEST);
-
-        onActivityResult(ADD_STUDENT_REQUEST, RESULT_OK, student);
-    }
-
-    private void setupRecyclerView() {
-        listAdapter = new MainActivityAdapter(position -> editStudent(listAdapter.getItem(position)), position -> deleteStudent(listAdapter.getItem(position)));
-        db.lstStudents.setHasFixedSize(true);
-        db.lstStudents.setLayoutManager(new GridLayoutManager(this, getResources().getInteger(R.integer.main_lstStudents_columns)));
-        db.lstStudents.setItemAnimator(new DefaultItemAnimator());
-        db.lstStudents.setAdapter(listAdapter);
-    }
-
-    private void deleteStudent(Student item) {
-        viewModel.deleteStudent(item);
-    }
-
-    private void editStudent(Student item) {
-        Intent student = new Intent(this, ProfileActivity.class);
-        student.putExtra(STUDENT, item);
-        startActivityForResult(student, EDIT_USER_REQUEST);
-        oldStudent = item;
-        onActivityResult(EDIT_USER_REQUEST, RESULT_OK, student);
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case EDIT_USER_REQUEST:
-                if (resultCode == RESULT_OK) {
-                    viewModel.editStudent(oldStudent, data.getParcelableExtra(STUDENT));
-                }
-                break;
-            case ADD_STUDENT_REQUEST:
-                if (resultCode == RESULT_OK) {
-                    viewModel.addStudent(data.getParcelableExtra(STUDENT));
-                }
-        }
     }
 }
