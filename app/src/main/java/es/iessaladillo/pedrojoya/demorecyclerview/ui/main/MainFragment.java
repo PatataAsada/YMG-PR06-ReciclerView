@@ -1,41 +1,60 @@
 package es.iessaladillo.pedrojoya.demorecyclerview.ui.main;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+
+import android.content.Intent;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import es.iessaladillo.pedrojoya.demorecyclerview.R;
 import es.iessaladillo.pedrojoya.demorecyclerview.data.local.DatabaseStudents;
 import es.iessaladillo.pedrojoya.demorecyclerview.data.local.model.Student;
 import es.iessaladillo.pedrojoya.demorecyclerview.databinding.ActivityMainBinding;
+import es.iessaladillo.pedrojoya.demorecyclerview.databinding.MainFragmentBinding;
 import es.iessaladillo.pedrojoya.demorecyclerview.ui.profile.ProfileActivity;
 
-public class MainActivity extends AppCompatActivity {
+import static android.app.Activity.RESULT_OK;
+
+public class MainFragment extends Fragment {
 
     private static final String STUDENT = "STUDENT";
     private static final int EDIT_USER_REQUEST = 1;
     private static final int ADD_STUDENT_REQUEST = 2;
-    private ActivityMainBinding db;
-    private MainActivityViewModel viewModel;
+    private MainFragmentBinding db;
     private MainActivityAdapter listAdapter;
     public Student oldStudent;
 
+    private MainFragmentViewModel viewModel;
+
+    public static MainFragment newInstance() {
+        return new MainFragment();
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        db = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        viewModel = ViewModelProviders.of(this, new MainActivityViewModelFactory(new DatabaseStudents())).get(MainActivityViewModel.class);
-        
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.main_fragment, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        db = DataBindingUtil.setContentView(getActivity(), R.layout.main_fragment);
+        viewModel = ViewModelProviders.of(this).get(MainFragmentViewModel.class);
+
         setupViews();
         observeStudents();
     }
-
     private void observeStudents() {
         viewModel.getStudents(true).observe(this, students -> {
             listAdapter.submitList(students);
@@ -43,13 +62,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
     private void setupViews() {
         setupRecyclerView();
         setupFAB();
         setupEmptyView();
     }
-
     private void setupEmptyView() {
         db.lblEmptyView.setOnClickListener(this::addStudent);
     }
@@ -68,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         listAdapter = new MainActivityAdapter(position -> editStudent(listAdapter.getItem(position)), position -> deleteStudent(listAdapter.getItem(position)));
         db.lstStudents.setHasFixedSize(true);
-        db.lstStudents.setLayoutManager(new GridLayoutManager(this, getResources().getInteger(R.integer.main_lstStudents_columns)));
+        db.lstStudents.setLayoutManager(new GridLayoutManager(getContext(), getResources().getInteger(R.integer.main_lstStudents_columns)));
         db.lstStudents.setItemAnimator(new DefaultItemAnimator());
         db.lstStudents.setAdapter(listAdapter);
     }
@@ -78,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void editStudent(Student item) {
-        Intent student = new Intent(this, ProfileActivity.class);
+        Intent student = new Intent(getContext(), ProfileActivity.class);
         student.putExtra(STUDENT, item);
         startActivityForResult(student, EDIT_USER_REQUEST);
         oldStudent = item;
@@ -87,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case EDIT_USER_REQUEST:
